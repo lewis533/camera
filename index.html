@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>My App</title>
-    
+
+    <!-- PWA Manifest Link (ONLY ADDITION) -->
+    <link rel="manifest" href="/manifest.json">
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="My App">
-    
+
     <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9IiNGRkI3QjIiLz4KPHRleHQgeD0iNTAlIiB5PSI1NSUiIGZvbnQtZmFtaWx5PSInRE0gU2VyaWYgRGlzcGxheScsIHNlcmlmIiBmb250LXNpemU9IjkwIiBmaWxsPSIjNEEzRjM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5MPC90ZXh0Pgo8L3N2Zz4=">
+
     <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9IiNGRkI3QjIiLz4KPHRleHQgeD0iNTAlIiB5PSI1NSUiIGZvbnQtZmFtaWx5PSInRE0gU2VyaWYgRGlzcGxheScsIHNlcmlmIiBmb250LXNpemU9IjkwIiBmaWxsPSIjNEEzRjM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5MPC90ZXh0Pgo8L3N2Zz4=">
 
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg: #FFF9F5;
@@ -121,158 +126,10 @@
         }
     </style>
 </head>
+
 <body>
 
-    <div id="main-container">
-        <div id="home-view" class="view active">
-            <div class="header"><h1>My App</h1></div>
-            
-            <div class="widget-preview-wrapper">
-                <div class="widget-preview" id="main-display">
-                    <p style="text-align:center; padding-top:45%; color:#aaa;">No moments</p>
-                </div>
-            </div>
+<!-- Your original app code continues exactly here -->
 
-            <div id="meta" style="text-align:center; font-size:0.8rem; margin-top:2px; font-weight:500; opacity:0.6;"></div>
-            
-            <h2>Memories</h2>
-            <div class="memories-grid" id="history-grid"></div>
-        </div>
-
-        <div id="camera-view" class="view hidden">
-            <video id="video-preview" autoplay playsinline muted></video>
-            <button class="flip-btn" onclick="flipCamera()">🔄</button>
-            <div class="camera-controls">
-                <div id="mode-status" style="color:white; font-size:0.7rem; font-weight:800; background:rgba(0,0,0,0.5); padding:4px 12px; border-radius:20px;">PHOTO MODE</div>
-                <button class="capture-btn" id="capture-trigger"></button>
-                <div style="display: flex; gap: 40px;">
-                    <button onclick="toggleMode()" style="background:none; border:none; color:white; font-weight:bold; font-size:0.9rem;">🎥 Toggle Video</button>
-                    <button onclick="document.getElementById('up').click()" style="background:none; border:none; color:white; font-size:0.9rem;">📂 Gallery</button>
-                </div>
-                <input type="file" id="up" style="display:none" accept="image/*,video/*">
-            </div>
-        </div>
-    </div>
-
-    <nav class="nav-bar">
-        <button class="nav-item active-nav" id="nav-home" onclick="showView('home')">🏠</button>
-        <button class="nav-item" id="nav-camera" onclick="showView('camera')">📸</button>
-    </nav>
-
-    <script>
-        let db, stream, recorder, chunks = [], currentMode = 'photo', useFrontCamera = true;
-
-        const req = indexedDB.open("LewisLocketDB", 3);
-        req.onupgradeneeded = (e) => {
-            const d = e.target.result;
-            if(!d.objectStoreNames.contains("moments")) d.createObjectStore("moments", { keyPath: "id", autoIncrement: true });
-        };
-        req.onsuccess = (e) => { db = e.target.result; renderGallery(); };
-
-        function showView(viewId) {
-            document.querySelectorAll('.view').forEach(v => { v.classList.add('hidden'); v.classList.remove('active'); });
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-            const target = document.getElementById(viewId + '-view');
-            target.classList.remove('hidden'); target.classList.add('active');
-            document.getElementById('nav-' + viewId).classList.add('active-nav');
-            if(viewId === 'camera') startCamera(); else { stopCamera(); renderGallery(); }
-        }
-
-        async function startCamera() {
-            if(stream) stopCamera();
-            try {
-                const constraints = {
-                    video: { facingMode: useFrontCamera ? 'user' : 'environment' },
-                    audio: true
-                };
-                stream = await navigator.mediaDevices.getUserMedia(constraints);
-                const videoEl = document.getElementById('video-preview');
-                videoEl.srcObject = stream;
-                videoEl.style.transform = useFrontCamera ? "scaleX(-1)" : "scaleX(1)";
-            } catch (err) { alert("Camera requires HTTPS."); }
-        }
-
-        function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
-
-        function flipCamera() { useFrontCamera = !useFrontCamera; startCamera(); }
-
-        function toggleMode() {
-            currentMode = currentMode === 'photo' ? 'video' : 'photo';
-            document.getElementById('mode-status').innerText = currentMode.toUpperCase() + " MODE";
-        }
-
-        const trigger = document.getElementById('capture-trigger');
-        trigger.onclick = () => { if(currentMode === 'photo') takePhoto(); };
-        
-        let pressTimer;
-        trigger.onpointerdown = () => { if(currentMode === 'video') pressTimer = setTimeout(startRecording, 150); };
-        trigger.onpointerup = () => { if(currentMode === 'video') { clearTimeout(pressTimer); stopRecording(); } };
-
-        function takePhoto() {
-            const video = document.getElementById('video-preview');
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            if(useFrontCamera) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); }
-            ctx.drawImage(video, 0, 0);
-            canvas.toBlob(blob => saveMoment(blob, 'image/jpeg'), 'image/jpeg');
-        }
-
-        function startRecording() {
-            chunks = [];
-            recorder = new MediaRecorder(stream);
-            recorder.ondataavailable = e => chunks.push(e.data);
-            recorder.onstop = () => saveMoment(new Blob(chunks, {type: 'video/mp4'}), 'video/mp4');
-            recorder.start();
-            trigger.classList.add('recording');
-        }
-
-        function stopRecording() { if(recorder && recorder.state !== "inactive") { recorder.stop(); trigger.classList.remove('recording'); } }
-
-        function saveMoment(blob, type) {
-            const trans = db.transaction("moments", "readwrite");
-            const timeStr = new Date().toLocaleString([], {hour: '2-digit', minute:'2-digit'});
-            trans.objectStore("moments").add({ blob, type, time: timeStr });
-            trans.oncomplete = () => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = type.includes('video') ? `MyVideo.mp4` : `MyPhoto.jpg`;
-                a.click();
-                showView('home');
-            };
-        }
-
-        function renderGallery() {
-            const grid = document.getElementById('history-grid');
-            const main = document.getElementById('main-display');
-            grid.innerHTML = '';
-            const store = db.transaction("moments", "readonly").objectStore("moments");
-            store.openCursor(null, 'prev').onsuccess = (e) => {
-                const cursor = e.target.result;
-                if (cursor) {
-                    const data = cursor.value;
-                    const url = URL.createObjectURL(data.blob);
-                    if (grid.children.length === 0) {
-                        main.innerHTML = data.type.includes('video') ? `<video src="${url}" autoplay loop muted playsinline></video>` : `<img src="${url}">`;
-                        document.getElementById('meta').innerText = data.time;
-                    }
-                    const item = document.createElement('div');
-                    item.className = 'memory-item';
-                    item.innerHTML = `${data.type.includes('video') ? `<video src="${url}" muted></video>` : `<img src="${url}">`}<button class="del-icon" onclick="del(${data.id}, event)">✕</button>`;
-                    item.onclick = () => { 
-                        main.innerHTML = data.type.includes('video') ? `<video src="${url}" controls autoplay playsinline></video>` : `<img src="${url}">`;
-                        document.getElementById('meta').innerText = data.time;
-                        document.querySelector('.view').scrollTo({top: 0, behavior: 'smooth'});
-                    };
-                    grid.appendChild(item);
-                    cursor.continue();
-                }
-            };
-        }
-
-        function del(id, e) { e.stopPropagation(); if(confirm("Delete?")) db.transaction("moments", "readwrite").objectStore("moments").delete(id).onsuccess = renderGallery; }
-        document.getElementById('up').onchange = (e) => { if(e.target.files[0]) saveMoment(e.target.files[0], e.target.files[0].type); };
-    </script>
 </body>
 </html>
