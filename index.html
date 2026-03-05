@@ -2,292 +2,457 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>My App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>My App</title>
 
-```
 <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#FFB7B2">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="My App">
 
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9IiNGRkI3QjIiLz4KPHRleHQgeD0iNTAlIiB5PSI1NSUiIGZvbnQtZmFtaWx5PSInRE0gU2VyaWYgRGlzcGxheScsIHNlcmlmIiBmb250LXNpemU9IjkwIiBmaWxsPSIjNEEzRjM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5MPC90ZXh0Pgo8L3N2Zz4=">
-<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9IiNGRkI3QjIiLz4KPHRleHQgeD0iNTAlIiB5PSI1NSUiIGZvbnQtZmFtaWx5PSInRE0gU2VyaWYgRGlzcGxheScsIHNlcmlmIiBmb250LXNpemU9IjkwIiBmaWxsPSIjNEEzRjM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5MPC90ZXh0Pgo8L3N2Zz4=">
-
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-    :root {
-        --bg: #FFF9F5;
-        --accent: #FFB7B2;
-        --text: #4A3F35;
-        --shadow: 0 8px 30px rgba(0,0,0,0.08);
-        --safe-bottom: env(safe-area-inset-bottom);
-    }
+:root {
+--bg: #FFF9F5;
+--accent: #FFB7B2;
+--text: #4A3F35;
+--shadow: 0 8px 30px rgba(0,0,0,0.08);
+--safe-bottom: env(safe-area-inset-bottom);
+}
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: var(--bg); }
-    body { font-family: 'Inter', sans-serif; color: var(--text); display: flex; flex-direction: column; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: var(--bg); }
+body { font-family: 'Inter', sans-serif; color: var(--text); display: flex; flex-direction: column; }
 
-    h1 { font-family: 'DM Serif Display', serif; margin: 10px 0; color: var(--text); }
-    h2 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; margin: 20px 0 10px 0; }
+h1 { font-family: 'DM Serif Display', serif; margin: 10px 0; color: var(--text); }
+h2 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; margin: 20px 0 10px 0; }
 
-    #main-container { flex: 1; position: relative; width: 100%; }
+#main-container { flex: 1; position: relative; width: 100%; }
 
-    .view {
-        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 20px; display: flex; flex-direction: column;
-        background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch;
-    }
+.view {
+position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+padding: 20px; display: flex; flex-direction: column;
+background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
 
-    .view.hidden { transform: translateX(100%); pointer-events: none; }
-    .view.active { transform: translateX(0); }
+.view.hidden { transform: translateX(100%); pointer-events: none; }
+.view.active { transform: translateX(0); }
 
-    .header { text-align: center; padding-top: 10px; flex-shrink: 0; }
-    
-    .widget-preview-wrapper {
-        flex-shrink: 0;
-        display: flex;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
-    
-    .widget-preview {
-        width: 320px;
-        height: 320px;
-        max-width: 85vw;
-        max-height: 85vw;
-        background: #f0f0f0;
-        border-radius: 60px; 
-        overflow: hidden;
-        border: 8px solid white; 
-        box-shadow: var(--shadow);
-        position: relative;
-    }
-    .widget-preview img, .widget-preview video { width: 100%; height: 100%; object-fit: cover; }
+.header { text-align: center; padding-top: 10px; flex-shrink: 0; }
 
-    .memories-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr);
-        gap: 10px; padding-bottom: 120px;
-    }
-    .memory-item {
-        aspect-ratio: 1/1; border-radius: 15px;
-        overflow: hidden; background: #eee; position: relative;
-    }
-    .memory-item img, .memory-item video { width: 100%; height: 100%; object-fit: cover; }
+.widget-preview-wrapper {
+flex-shrink: 0;
+display: flex;
+justify-content: center;
+margin-bottom: 10px;
+}
 
-    #camera-view { background: #000; padding: 0; overflow: hidden; }
-    
-    #video-preview { 
-        width: 100%; 
-        height: 100%; 
-        object-fit: cover;
-        transform: scaleX(-1);
-    }
-    
-    .camera-controls {
-        position: absolute; bottom: calc(40px + var(--safe-bottom)); 
-        width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px;
-    }
-    
-    .capture-btn {
-        width: 80px; height: 80px; border-radius: 50%;
-        border: 6px solid white; background: transparent; position: relative;
-    }
-    .capture-btn::after {
-        content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
-        background: white; border-radius: 50%;
-    }
-    .recording::after { background: #ff4d4d; border-radius: 12px; transform: scale(0.6); }
+.widget-preview {
+width: 320px;
+height: 320px;
+max-width: 85vw;
+max-height: 85vw;
+background: #f0f0f0;
+border-radius: 60px;
+overflow: hidden;
+border: 8px solid white;
+box-shadow: var(--shadow);
+position: relative;
+}
 
-    .nav-bar {
-        height: calc(80px + var(--safe-bottom));
-        background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
-        display: flex; justify-content: space-around; align-items: center;
-        padding-bottom: var(--safe-bottom); border-top: 1px solid rgba(0,0,0,0.05);
-        flex-shrink: 0;
-    }
-    .nav-item { border: none; background: none; font-size: 1.8rem; color: #ddd; padding: 10px; }
-    .nav-item.active-nav { color: var(--accent); }
+.widget-preview img, .widget-preview video { width: 100%; height: 100%; object-fit: cover; }
 
-    .del-icon {
-        position: absolute; top: 5px; right: 5px;
-        background: rgba(0,0,0,0.3); color: white; border: none;
-        border-radius: 50%; width: 22px; height: 22px; font-size: 12px;
-    }
-    .flip-btn {
-        position: absolute; top: 40px; right: 20px;
-        background: rgba(255,255,255,0.2); border: none; border-radius: 50%;
-        width: 45px; height: 45px; color: white; font-size: 1.2rem;
-        backdrop-filter: blur(5px); z-index: 10;
-    }
+.memories-grid {
+display: grid; grid-template-columns: repeat(3, 1fr);
+gap: 10px; padding-bottom: 120px;
+}
+
+.memory-item {
+aspect-ratio: 1/1; border-radius: 15px;
+overflow: hidden; background: #eee; position: relative;
+}
+
+.memory-item img, .memory-item video { width: 100%; height: 100%; object-fit: cover; }
+
+#camera-view { background: #000; padding: 0; overflow: hidden; }
+
+#video-preview {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transform: scaleX(-1);
+}
+
+.camera-controls {
+position: absolute; bottom: calc(40px + var(--safe-bottom));
+width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+
+.capture-btn {
+width: 80px; height: 80px; border-radius: 50%;
+border: 6px solid white; background: transparent; position: relative;
+}
+
+.capture-btn::after {
+content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
+background: white; border-radius: 50%;
+}
+
+.recording::after { background: #ff4d4d; border-radius: 12px; transform: scale(0.6); }
+
+.nav-bar {
+height: calc(80px + var(--safe-bottom));
+background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+display: flex; justify-content: space-around; align-items: center;
+padding-bottom: var(--safe-bottom); border-top: 1px solid rgba(0,0,0,0.05);
+flex-shrink: 0;
+}
+
+.nav-item { border: none; background: none; font-size: 1.8rem; color: #ddd; padding: 10px; }
+.nav-item.active-nav { color: var(--accent); }
+
+.del-icon {
+position: absolute; top: 5px; right: 5px;
+background: rgba(0,0,0,0.3); color: white; border: none;
+border-radius: 50%; width: 22px; height: 22px; font-size: 12px;
+}
+
+.flip-btn {
+position: absolute; top: 40px; right: 20px;
+background: rgba(255,255,255,0.2); border: none; border-radius: 50%;
+width: 45px; height: 45px; color: white; font-size: 1.2rem;
+backdrop-filter: blur(5px); z-index: 10;
+}
 </style>
-```
-
 </head>
+
 <body>
 
-```
 <div id="main-container">
-    <div id="home-view" class="view active">
-        <div class="header"><h1>My App</h1></div>
-        
-        <div class="widget-preview-wrapper">
-            <div class="widget-preview" id="main-display">
-                <p style="text-align:center; padding-top:45%; color:#aaa;">No moments</p>
-            </div>
-        </div>
 
-        <div id="meta" style="text-align:center; font-size:0.8rem; margin-top:2px; font-weight:500; opacity:0.6;"></div>
-        
-        <h2>Memories</h2>
-        <div class="memories-grid" id="history-grid"></div>
-    </div>
+<div id="home-view" class="view active">
+<div class="header"><h1>My App</h1></div>
 
-    <div id="camera-view" class="view hidden">
-        <video id="video-preview" autoplay playsinline muted></video>
-        <button class="flip-btn" onclick="flipCamera()">🔄</button>
-        <div class="camera-controls">
-            <div id="mode-status" style="color:white; font-size:0.7rem; font-weight:800; background:rgba(0,0,0,0.5); padding:4px 12px; border-radius:20px;">PHOTO MODE</div>
-            <button class="capture-btn" id="capture-trigger"></button>
-            <div style="display: flex; gap: 40px;">
-                <button onclick="toggleMode()" style="background:none; border:none; color:white; font-weight:bold; font-size:0.9rem;">🎥 Toggle Video</button>
-                <button onclick="document.getElementById('up').click()" style="background:none; border:none; color:white; font-size:0.9rem;">📂 Gallery</button>
-            </div>
-            <input type="file" id="up" style="display:none" accept="image/*,video/*">
-        </div>
-    </div>
+<div class="widget-preview-wrapper">
+<div class="widget-preview" id="main-display">
+<p style="text-align:center; padding-top:45%; color:#aaa;">No moments</p>
+</div>
+</div>
+
+<div id="meta" style="text-align:center; font-size:0.8rem; margin-top:2px; font-weight:500; opacity:0.6;"></div>
+
+<h2>Memories</h2>
+<div class="memories-grid" id="history-grid"></div>
+
+</div>
+
+<div id="camera-view" class="view hidden">
+
+<video id="video-preview" autoplay playsinline muted></video>
+
+<button class="flip-btn" onclick="flipCamera()">🔄</button>
+
+<div class="camera-controls">
+
+<div id="mode-status" style="color:white; font-size:0.7rem; font-weight:800; background:rgba(0,0,0,0.5); padding:4px 12px; border-radius:20px;">PHOTO MODE</div>
+
+<button class="capture-btn" id="capture-trigger"></button>
+
+<div style="display:flex; gap:40px;">
+<button onclick="toggleMode()" style="background:none; border:none; color:white; font-weight:bold; font-size:0.9rem;">🎥 Toggle Video</button>
+<button onclick="document.getElementById('up').click()" style="background:none; border:none; color:white; font-size:0.9rem;">📂 Gallery</button>
+</div>
+
+<input type="file" id="up" style="display:none" accept="image/*,video/*">
+
+</div>
+
+</div>
+
 </div>
 
 <nav class="nav-bar">
-    <button class="nav-item active-nav" id="nav-home" onclick="showView('home')">🏠</button>
-    <button class="nav-item" id="nav-camera" onclick="showView('camera')">📸</button>
+<button class="nav-item active-nav" id="nav-home" onclick="showView('home')">🏠</button>
+<button class="nav-item" id="nav-camera" onclick="showView('camera')">📸</button>
 </nav>
 
 <script>
-    let db, stream, recorder, chunks = [], currentMode = 'photo', useFrontCamera = true;
 
-    const req = indexedDB.open("LewisLocketDB", 3);
-    req.onupgradeneeded = (e) => {
-        const d = e.target.result;
-        if(!d.objectStoreNames.contains("moments")) d.createObjectStore("moments", { keyPath: "id", autoIncrement: true });
-    };
-    req.onsuccess = (e) => { db = e.target.result; renderGallery(); };
+let db, stream, recorder, chunks = [], currentMode = 'photo', useFrontCamera = true;
 
-    function showView(viewId) {
-        document.querySelectorAll('.view').forEach(v => { v.classList.add('hidden'); v.classList.remove('active'); });
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-        const target = document.getElementById(viewId + '-view');
-        target.classList.remove('hidden'); target.classList.add('active');
-        document.getElementById('nav-' + viewId).classList.add('active-nav');
-        if(viewId === 'camera') startCamera(); else { stopCamera(); renderGallery(); }
-    }
+const req = indexedDB.open("LewisLocketDB", 3);
 
-    async function startCamera() {
-        if(stream) stopCamera();
-        try {
-            const constraints = {
-                video: { facingMode: useFrontCamera ? 'user' : 'environment' },
-                audio: true
-            };
-            stream = await navigator.mediaDevices.getUserMedia(constraints);
-            const videoEl = document.getElementById('video-preview');
-            videoEl.srcObject = stream;
-            videoEl.style.transform = useFrontCamera ? "scaleX(-1)" : "scaleX(1)";
-        } catch (err) { alert("Camera requires HTTPS."); }
-    }
+req.onupgradeneeded = (e) => {
+const d = e.target.result;
+if(!d.objectStoreNames.contains("moments"))
+d.createObjectStore("moments", { keyPath: "id", autoIncrement: true });
+};
 
-    function stopCamera() { if(stream) stream.getTracks().forEach(t => t.stop()); }
+req.onsuccess = (e) => { db = e.target.result; renderGallery(); };
 
-    function flipCamera() { useFrontCamera = !useFrontCamera; startCamera(); }
+function showView(viewId) {
 
-    function toggleMode() {
-        currentMode = currentMode === 'photo' ? 'video' : 'photo';
-        document.getElementById('mode-status').innerText = currentMode.toUpperCase() + " MODE";
-    }
+document.querySelectorAll('.view').forEach(v => {
+v.classList.add('hidden');
+v.classList.remove('active');
+});
 
-    const trigger = document.getElementById('capture-trigger');
-    trigger.onclick = () => { if(currentMode === 'photo') takePhoto(); };
-    
-    let pressTimer;
-    trigger.onpointerdown = () => { if(currentMode === 'video') pressTimer = setTimeout(startRecording, 150); };
-    trigger.onpointerup = () => { if(currentMode === 'video') { clearTimeout(pressTimer); stopRecording(); } };
+document.querySelectorAll('.nav-item').forEach(n =>
+n.classList.remove('active-nav')
+);
 
-    function takePhoto() {
-        const video = document.getElementById('video-preview');
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        if(useFrontCamera) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); }
-        ctx.drawImage(video, 0, 0);
-        canvas.toBlob(blob => saveMoment(blob, 'image/jpeg'), 'image/jpeg');
-    }
+const target = document.getElementById(viewId + '-view');
 
-    function startRecording() {
-        chunks = [];
-        recorder = new MediaRecorder(stream);
-        recorder.ondataavailable = e => chunks.push(e.data);
-        recorder.onstop = () => saveMoment(new Blob(chunks, {type: 'video/mp4'}), 'video/mp4');
-        recorder.start();
-        trigger.classList.add('recording');
-    }
+target.classList.remove('hidden');
+target.classList.add('active');
 
-    function stopRecording() { if(recorder && recorder.state !== "inactive") { recorder.stop(); trigger.classList.remove('recording'); } }
+document.getElementById('nav-' + viewId).classList.add('active-nav');
 
-    function saveMoment(blob, type) {
-        const trans = db.transaction("moments", "readwrite");
-        const timeStr = new Date().toLocaleString([], {hour: '2-digit', minute:'2-digit'});
-        trans.objectStore("moments").add({ blob, type, time: timeStr });
-        trans.oncomplete = () => {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = type.includes('video') ? `MyVideo.mp4` : `MyPhoto.jpg`;
-            a.click();
-            showView('home');
-        };
-    }
+if(viewId === 'camera')
+startCamera();
+else {
+stopCamera();
+renderGallery();
+}
 
-    function renderGallery() {
-        const grid = document.getElementById('history-grid');
-        const main = document.getElementById('main-display');
-        grid.innerHTML = '';
-        const store = db.transaction("moments", "readonly").objectStore("moments");
-        store.openCursor(null, 'prev').onsuccess = (e) => {
-            const cursor = e.target.result;
-            if (cursor) {
-                const data = cursor.value;
-                const url = URL.createObjectURL(data.blob);
-                if (grid.children.length === 0) {
-                    main.innerHTML = data.type.includes('video') ? `<video src="${url}" autoplay loop muted playsinline></video>` : `<img src="${url}">`;
-                    document.getElementById('meta').innerText = data.time;
-                }
-                const item = document.createElement('div');
-                item.className = 'memory-item';
-                item.innerHTML = `${data.type.includes('video') ? `<video src="${url}" muted></video>` : `<img src="${url}">`}<button class="del-icon" onclick="del(${data.id}, event)">✕</button>`;
-                item.onclick = () => { 
-                    main.innerHTML = data.type.includes('video') ? `<video src="${url}" controls autoplay playsinline></video>` : `<img src="${url}">`;
-                    document.getElementById('meta').innerText = data.time;
-                    document.querySelector('.view').scrollTo({top: 0, behavior: 'smooth'});
-                };
-                grid.appendChild(item);
-                cursor.continue();
-            }
-        };
-    }
+}
 
-    function del(id, e) { e.stopPropagation(); if(confirm("Delete?")) db.transaction("moments", "readwrite").objectStore("moments").delete(id).onsuccess = renderGallery; }
-    document.getElementById('up').onchange = (e) => { if(e.target.files[0]) saveMoment(e.target.files[0], e.target.files[0].type); };
+async function startCamera() {
 
-    if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-            navigator.serviceWorker.register("./service-worker.js");
-        });
-    }
+if(stream) stopCamera();
+
+try {
+
+const constraints = {
+video: { facingMode: useFrontCamera ? 'user' : 'environment' },
+audio: true
+};
+
+stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+const videoEl = document.getElementById('video-preview');
+
+videoEl.srcObject = stream;
+
+videoEl.style.transform = useFrontCamera ? "scaleX(-1)" : "scaleX(1)";
+
+}
+catch (err) { alert("Camera requires HTTPS."); }
+
+}
+
+function stopCamera() {
+if(stream) stream.getTracks().forEach(t => t.stop());
+}
+
+function flipCamera() {
+useFrontCamera = !useFrontCamera;
+startCamera();
+}
+
+function toggleMode() {
+
+currentMode = currentMode === 'photo' ? 'video' : 'photo';
+
+document.getElementById('mode-status').innerText =
+currentMode.toUpperCase() + " MODE";
+
+}
+
+const trigger = document.getElementById('capture-trigger');
+
+trigger.onclick = () => {
+if(currentMode === 'photo') takePhoto();
+};
+
+let pressTimer;
+
+trigger.onpointerdown = () => {
+if(currentMode === 'video')
+pressTimer = setTimeout(startRecording, 150);
+};
+
+trigger.onpointerup = () => {
+if(currentMode === 'video') {
+clearTimeout(pressTimer);
+stopRecording();
+}
+};
+
+function takePhoto() {
+
+const video = document.getElementById('video-preview');
+
+const canvas = document.createElement('canvas');
+
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+
+const ctx = canvas.getContext('2d');
+
+if(useFrontCamera) {
+ctx.translate(canvas.width, 0);
+ctx.scale(-1, 1);
+}
+
+ctx.drawImage(video, 0, 0);
+
+canvas.toBlob(blob => saveMoment(blob, 'image/jpeg'), 'image/jpeg');
+
+}
+
+function startRecording() {
+
+chunks = [];
+
+recorder = new MediaRecorder(stream);
+
+recorder.ondataavailable = e => chunks.push(e.data);
+
+recorder.onstop = () =>
+saveMoment(new Blob(chunks, {type: 'video/mp4'}), 'video/mp4');
+
+recorder.start();
+
+trigger.classList.add('recording');
+
+}
+
+function stopRecording() {
+
+if(recorder && recorder.state !== "inactive") {
+recorder.stop();
+trigger.classList.remove('recording');
+}
+
+}
+
+function saveMoment(blob, type) {
+
+const trans = db.transaction("moments", "readwrite");
+
+const timeStr =
+new Date().toLocaleString([], {hour:'2-digit', minute:'2-digit'});
+
+trans.objectStore("moments").add({ blob, type, time: timeStr });
+
+trans.oncomplete = () => {
+
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement('a');
+
+a.href = url;
+
+a.download =
+type.includes('video') ? `MyVideo.mp4` : `MyPhoto.jpg`;
+
+a.click();
+
+showView('home');
+
+};
+
+}
+
+function renderGallery() {
+
+const grid = document.getElementById('history-grid');
+
+const main = document.getElementById('main-display');
+
+grid.innerHTML = '';
+
+const store =
+db.transaction("moments", "readonly").objectStore("moments");
+
+store.openCursor(null, 'prev').onsuccess = (e) => {
+
+const cursor = e.target.result;
+
+if (cursor) {
+
+const data = cursor.value;
+
+const url = URL.createObjectURL(data.blob);
+
+if (grid.children.length === 0) {
+
+main.innerHTML =
+data.type.includes('video')
+? `<video src="${url}" autoplay loop muted playsinline></video>`
+: `<img src="${url}">`;
+
+document.getElementById('meta').innerText = data.time;
+
+}
+
+const item = document.createElement('div');
+
+item.className = 'memory-item';
+
+item.innerHTML =
+`${data.type.includes('video')
+? `<video src="${url}" muted></video>`
+: `<img src="${url}">`}
+<button class="del-icon" onclick="del(${data.id}, event)">✕</button>`;
+
+item.onclick = () => {
+
+main.innerHTML =
+data.type.includes('video')
+? `<video src="${url}" controls autoplay playsinline></video>`
+: `<img src="${url}">`;
+
+document.getElementById('meta').innerText = data.time;
+
+document.querySelector('.view')
+.scrollTo({top:0, behavior:'smooth'});
+
+};
+
+grid.appendChild(item);
+
+cursor.continue();
+
+}
+
+};
+
+}
+
+function del(id, e) {
+
+e.stopPropagation();
+
+if(confirm("Delete?"))
+
+db.transaction("moments","readwrite")
+.objectStore("moments")
+.delete(id)
+.onsuccess = renderGallery;
+
+}
+
+document.getElementById('up').onchange = (e) => {
+
+if(e.target.files[0])
+saveMoment(e.target.files[0], e.target.files[0].type);
+
+};
+
+if ("serviceWorker" in navigator) {
+window.addEventListener("load", () => {
+navigator.serviceWorker.register("./sw.js");
+});
+}
+
 </script>
-```
 
 </body>
 </html>
