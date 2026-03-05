@@ -1,0 +1,16 @@
+{
+"name":"My App",
+"short_name":"My App",
+"start_url":"/",
+"display":"standalone",
+"background_color":"#FFF9F5",
+"theme_color":"#FFB7B2",
+"orientation":"portrait",
+"icons":[
+{
+"src":"data:image/svg+xml;base64,PHN2ZyB2aWV3Qm9...cameraicon",
+"sizes":"512x512",
+"type":"image/png"
+}
+]
+}
