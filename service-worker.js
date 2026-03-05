@@ -41,5 +41,3 @@ return caches.match("/index.html");
 });
 })
 );
-
-});
